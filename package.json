@@ -1,0 +1,25 @@
+{
+  "name": "metalsmith-dom-transform",
+  "version": "0.0.1",
+  "description": "Metalsmith plugin for transforming page DOM",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fortes/metalsmith-dom-transform.git"
+  },
+  "keywords": [
+    "metalsmith",
+    "plugin",
+    "jsdom",
+    "dom"
+  ],
+  "homepage": "https://github.com/fortes/metalsmith-dom-transform",
+  "author": "Filipe Fortes <accounts@fortes.com>",
+  "license": "MIT",
+  "dependencies": {
+    "jsdom": "^11.2.0"
+  }
+}
