@@ -47,6 +47,11 @@ There is currently only one option:
 
 Uses Promises, so requires a relatively recent (4.x or higher) version of node.
 
+## Changelog
+
+* `0.0.2`: Fix stupid bug where async did not work
+* `0.0.1`: Initial release
+
 ## Alternatives
 
 * [metalsmith-batch-dom](https://github.com/krambuhl/metalsmith-batch-dom): Manipulations based on query selectors and Cheerio, no metadata, all transforms must be synchronous.

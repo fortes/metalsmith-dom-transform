@@ -22,7 +22,7 @@ function runTransforms(data, {transforms}) {
 
   return Promise.all(
     transforms.map(transform => {
-      new Promise(resolve => {
+      return new Promise(resolve => {
         transform(root, data, err => {
           if (err) {
             reject(err);

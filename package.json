@@ -1,6 +1,6 @@
 {
   "name": "metalsmith-dom-transform",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Metalsmith plugin for transforming page DOM",
   "main": "index.js",
   "scripts": {
