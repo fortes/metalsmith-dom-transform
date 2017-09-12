@@ -1,4 +1,4 @@
-# metalsmith-dom-transform
+# metalsmith-dom-transform [![build status](https://travis-ci.org/fortes/metalsmith-dom-transform.svg?branch=master)](https://travis-ci.org/fortes/metalsmith-dom-transform/)
 
 Infrastructure plugin for transforming page DOM via [jsdom](https://github.com/tmpvar/jsdom). Use this for small tweaks, or build your plugin on top of this one.
 
