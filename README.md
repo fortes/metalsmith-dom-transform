@@ -1,6 +1,6 @@
-# metalsmith-dom-transform [![build status](https://travis-ci.org/fortes/metalsmith-dom-transform.svg?branch=master)](https://travis-ci.org/fortes/metalsmith-dom-transform/) [![codecov](https://codecov.io/gh/fortes/metalsmith-dom-transform/branch/master/graph/badge.svg)](https://codecov.io/gh/fortes/metalsmith-dom-transform)
+# metalsmith-dom-transform
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/fortes/metalsmith-dom-transform.svg)](https://greenkeeper.io/)
+[![build status](https://travis-ci.org/fortes/metalsmith-dom-transform.svg?branch=master)](https://travis-ci.org/fortes/metalsmith-dom-transform/) [![codecov](https://codecov.io/gh/fortes/metalsmith-dom-transform/branch/master/graph/badge.svg)](https://codecov.io/gh/fortes/metalsmith-dom-transform) [![Greenkeeper badge](https://badges.greenkeeper.io/fortes/metalsmith-dom-transform.svg)](https://greenkeeper.io/)
 
 Infrastructure plugin for transforming page DOM via [jsdom](https://github.com/tmpvar/jsdom). Use this for small tweaks, or build your plugin on top of this one.
 
