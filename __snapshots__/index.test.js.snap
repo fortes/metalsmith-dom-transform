@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Fragment not wrapped in HTML structure 1`] = `"<div class=\\"added\\">Root</div>"`;
+
+exports[`Full document with doctype 1`] = `"<!DOCTYPE html><html><head><title>Test Page</title></head><body><div class=\\"added\\">this is the root</div><img src=\\"hi.jpg\\" width=\\"100\\"></body></html>"`;
+
+exports[`Full document without doctype 1`] = `"<html><head><title>Test Page</title></head><body><div class=\\"added\\">this is the root</div><img src=\\"hi.jpg\\" width=\\"100\\"></body></html>"`;
+
+exports[`no change to non-html file 1`] = `"<p>Hi</p>"`;

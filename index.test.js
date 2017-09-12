@@ -18,6 +18,11 @@ beforeEach(() => {
         '<!DOCTYPE html><html><head><title>Test Page</title></head><body><div>this is the root</div><img src="hi.jpg"></body></html>',
       ),
     },
+    'nodoctype.html': {
+      contents: new Buffer(
+        '<html><head><title>Test Page</title></head><body><div>this is the root</div><img src="hi.jpg"></body></html>',
+      ),
+    },
   };
 
   plugin = promisify(
@@ -33,7 +38,7 @@ beforeEach(() => {
             image.setAttribute('width', 100);
           }
           // Make it async
-          setImmediate(done);
+          setTimeout(done, 50);
         },
       ],
     }),
@@ -43,17 +48,17 @@ beforeEach(() => {
 });
 
 test('no change to non-html file', () => {
-  expect(files['bogus.jpg'].contents.toString()).toBe('<p>Hi</p>');
+  expect(files['bogus.jpg'].contents.toString()).toMatchSnapshot();
 });
 
 test('Fragment not wrapped in HTML structure', () => {
-  expect(files['fragment.html'].contents.toString()).toBe(
-    '<div class="added">Root</div>',
-  );
+  expect(files['fragment.html'].contents.toString()).toMatchSnapshot();
 });
 
-test('Full document', () => {
-  expect(files['doctype.html'].contents.toString()).toBe(
-    '<!DOCTYPE html><html><head><title>Test Page</title></head><body><div class="added">this is the root</div><img src="hi.jpg" width="100"></body></html>',
-  );
+test('Full document with doctype', () => {
+  expect(files['doctype.html'].contents.toString()).toMatchSnapshot();
+});
+
+test('Full document without doctype', () => {
+  expect(files['nodoctype.html'].contents.toString()).toMatchSnapshot();
 });
