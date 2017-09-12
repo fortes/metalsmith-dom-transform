@@ -28,11 +28,11 @@ beforeEach(() => {
   plugin = promisify(
     domTransform({
       transforms: [
-        (root, data, done) => {
+        (root, data, metalsmith, done) => {
           root.querySelector('div').classList.add('added');
           done();
         },
-        (root, data, done) => {
+        (root, data, metalsmith, done) => {
           const image = root.querySelector('img');
           if (image) {
             image.setAttribute('width', 100);

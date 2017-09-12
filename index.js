@@ -7,7 +7,7 @@ function isFragment(html) {
   return !/<html/i.test(html);
 }
 
-function runTransforms(data, {transforms}) {
+function runTransforms(data, {transforms}, metalsmith) {
   let root;
   let dom;
   const html = data.contents.toString();
@@ -23,7 +23,7 @@ function runTransforms(data, {transforms}) {
   return Promise.all(
     transforms.map(transform => {
       return new Promise(resolve => {
-        transform(root, data, err => {
+        transform(root, data, metalsmith, err => {
           if (err) {
             reject(err);
           } else {
@@ -47,7 +47,7 @@ module.exports = function(options) {
 
     for (var file in files) {
       if (HTML_FILENAME_REGEXP.test(file)) {
-        fileTransforms.push(runTransforms(files[file], options));
+        fileTransforms.push(runTransforms(files[file], options, metalsmith));
       }
     }
 

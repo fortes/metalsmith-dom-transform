@@ -11,7 +11,7 @@ metalsmith.use(
   domTransform({
     transforms: [
       // Set target=_blank on all links
-      function(dom, data, done) {
+      function(dom, data, metalsmith, done) {
         const links = dom.querySelectorAll('a[href]');
         for (let i = 0; i < links.length; i++) {
           links[i].target = '_blank';
@@ -21,7 +21,7 @@ metalsmith.use(
       },
 
       // Make all images 200px wide
-      function(dom, data, done) {
+      function(dom, data, metalsmith, done) {
         const img = dom.querySelectorAll('img');
         for (let i = 0; i < pre.length; i++) {
           img.width = 200;
@@ -41,6 +41,7 @@ There is currently only one option:
 * `transforms`: array of functions that serve as DOM transformations. Each function takes three arguments:
   * `dom`: The root of the DOM for that page
   * `data`: Metalsmith object for the page, contains metadata, etc.
+  * `metalsmith`: Metalsmith instance, passed to all plugins
   * `done`: Callback for transformation completion
 
 ## Requirements
@@ -49,6 +50,7 @@ Uses Promises, so requires a relatively recent (4.x or higher) version of node.
 
 ## Changelog
 
+* `1.0.0`: Add `metalsmith` parameter
 * `0.0.2`: Fix stupid bug where async did not work
 * `0.0.1`: Initial release
 
