@@ -1,9 +1,15 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Fragment not wrapped in HTML structure 1`] = `"<div class=\\"added\\">Root</div>"`;
+exports[`crashy transform 1`] = `"<!DOCTYPE html><html><head><title>Test Page</title></head><body><div class=\\"added\\">this is the root</div><img src=\\"hi.jpg\\" width=\\"100\\"></body></html>"`;
 
-exports[`Full document with doctype 1`] = `"<!DOCTYPE html><html><head><title>Test Page</title></head><body><div class=\\"added\\">this is the root</div><img src=\\"hi.jpg\\" width=\\"100\\"></body></html>"`;
+exports[`crashy transform 2`] = `"Error during DOM transform of nochanges.html: Crash!"`;
 
-exports[`Full document without doctype 1`] = `"<html><head><title>Test Page</title></head><body><div class=\\"added\\">this is the root</div><img src=\\"hi.jpg\\" width=\\"100\\"></body></html>"`;
+exports[`doctype.html 1`] = `"<!DOCTYPE html><html><head><title>Test Page</title></head><body><div class=\\"added\\">this is the root</div><img src=\\"hi.jpg\\" width=\\"100\\"></body></html>"`;
 
-exports[`no change to non-html file 1`] = `"<p>Hi</p>"`;
+exports[`fragment.html 1`] = `"<div class=\\"added\\">Root</div>"`;
+
+exports[`ignore-non-html.jpg 1`] = `"<div>Hi</div>"`;
+
+exports[`nochanges.html 1`] = `"<title>Test Page</title><p>nothing <em>here"`;
+
+exports[`nodoctype.html 1`] = `"<html><head><title>Test Page</title></head><body><div class=\\"added\\">this is the root</div><img src=\\"hi.jpg\\" width=\\"100\\"></body></html>"`;

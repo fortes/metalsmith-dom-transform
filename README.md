@@ -56,6 +56,7 @@ Uses Promises, so requires a relatively recent (4.x or higher) version of node.
 
 ## Changelog
 
+* `1.0.1`: Don't serialize HTML if nothing changed (may cause HTML output differences)
 * `1.0.0`: Add `metalsmith` parameter
 * `0.0.2`: Fix stupid bug where async did not work
 * `0.0.1`: Initial release

@@ -20,9 +20,15 @@ function runTransforms(data, {transforms}, metalsmith) {
     root = dom.window.document.documentElement;
   }
 
+  const getHtml = useFragment
+    ? () => root.firstChild.innerHTML
+    : () => dom.serialize();
+
+  const previousHtml = getHtml();
+
   return Promise.all(
     transforms.map(transform => {
-      return new Promise(resolve => {
+      return new Promise((resolve, reject) => {
         transform(root, data, metalsmith, err => {
           if (err) {
             reject(err);
@@ -33,10 +39,10 @@ function runTransforms(data, {transforms}, metalsmith) {
       });
     }),
   ).then(() => {
-    if (useFragment) {
-      data.contents = new Buffer(root.firstChild.innerHTML);
-    } else {
-      data.contents = new Buffer(dom.serialize());
+    const newHtml = getHtml();
+
+    if (newHtml !== previousHtml) {
+      data.contents = new Buffer(getHtml());
     }
   });
 }
@@ -53,7 +59,7 @@ module.exports = function(options) {
 
     Promise.all(fileTransforms)
       .catch(err => {
-        console.error(err.message);
+        console.error(`Error during DOM transform of ${file}: ${err.message}`);
       })
       .then(() => {
         done();

@@ -2,63 +2,84 @@
 const domTransform = require('./index');
 const {promisify} = require('util');
 
-let files;
-let plugin;
+const files = {
+  'ignore-non-html.jpg': {
+    contents: new Buffer('<div>Hi</div>'),
+  },
+  'fragment.html': {
+    contents: new Buffer('<div>Root</div>'),
+  },
+  'doctype.html': {
+    contents: new Buffer(
+      '<!DOCTYPE html><html><head><title>Test Page</title></head><body><div>this is the root</div><img src="hi.jpg"></body></html>',
+    ),
+  },
+  'nodoctype.html': {
+    contents: new Buffer(
+      '<html><head><title>Test Page</title></head><body><div>this is the root</div><img src="hi.jpg"></body></html>',
+    ),
+  },
+  'nochanges.html': {
+    contents: new Buffer('<title>Test Page</title><p>nothing <em>here'),
+  },
+};
+
+const plugin = promisify(
+  domTransform({
+    transforms: [
+      (root, data, metalsmith, done) => {
+        const div = root.querySelector('div');
+
+        if (div) {
+          div.classList.add('added');
+        }
+
+        done();
+      },
+      (root, data, metalsmith, done) => {
+        const image = root.querySelector('img');
+        if (image) {
+          image.setAttribute('width', 100);
+        }
+        // Make it async
+        setTimeout(done, 50);
+      },
+    ],
+  }),
+);
 
 beforeEach(() => {
-  files = {
-    'bogus.jpg': {
-      contents: new Buffer('<p>Hi</p>'),
-    },
-    'fragment.html': {
-      contents: new Buffer('<div>Root</div>'),
-    },
-    'doctype.html': {
-      contents: new Buffer(
-        '<!DOCTYPE html><html><head><title>Test Page</title></head><body><div>this is the root</div><img src="hi.jpg"></body></html>',
-      ),
-    },
-    'nodoctype.html': {
-      contents: new Buffer(
-        '<html><head><title>Test Page</title></head><body><div>this is the root</div><img src="hi.jpg"></body></html>',
-      ),
-    },
-  };
+  return plugin(files, {});
+});
 
-  plugin = promisify(
+for (let file in files) {
+  test(file, () => {
+    expect(files[file].contents.toString()).toMatchSnapshot();
+  });
+}
+
+test('crashy transform', () => {
+  const crashy = promisify(
     domTransform({
       transforms: [
         (root, data, metalsmith, done) => {
-          root.querySelector('div').classList.add('added');
-          done();
-        },
-        (root, data, metalsmith, done) => {
-          const image = root.querySelector('img');
-          if (image) {
-            image.setAttribute('width', 100);
-          }
-          // Make it async
-          setTimeout(done, 50);
+          // Changes shouldn't take effect
+          root.innerHTML = 'CRASH';
+          done(new Error('Crash!'));
         },
       ],
     }),
   );
 
-  return plugin(files, {});
-});
+  // Mock out `console.error`
+  /* eslint-disable no-console */
+  const originalConsoleError = console.error;
+  console.error = jest.fn(() => {});
 
-test('no change to non-html file', () => {
-  expect(files['bogus.jpg'].contents.toString()).toMatchSnapshot();
-});
-
-test('Fragment not wrapped in HTML structure', () => {
-  expect(files['fragment.html'].contents.toString()).toMatchSnapshot();
-});
-
-test('Full document with doctype', () => {
-  expect(files['doctype.html'].contents.toString()).toMatchSnapshot();
-});
-
-test('Full document without doctype', () => {
-  expect(files['nodoctype.html'].contents.toString()).toMatchSnapshot();
+  return crashy(files, {}).then(() => {
+    // Should have no changes.
+    expect(files['doctype.html'].contents.toString()).toMatchSnapshot();
+    expect(console.error.mock.calls[0][0]).toMatchSnapshot();
+    console.error = originalConsoleError;
+  });
 });
