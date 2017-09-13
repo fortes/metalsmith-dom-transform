@@ -2,7 +2,30 @@
 const domTransform = require('./index');
 const {promisify} = require('util');
 
-let files;
+const files = {
+  'ignore-non-html.jpg': {
+    contents: new Buffer('<div>Hi</div>'),
+  },
+  'fragment.html': {
+    contents: new Buffer('<div>Root</div>'),
+  },
+  'doctype.html': {
+    contents: new Buffer(
+      '<!DOCTYPE html><html><head><title>Test Page</title></head><body><div>this is the root</div><img src="hi.jpg"></body></html>',
+    ),
+  },
+  'nodoctype.html': {
+    contents: new Buffer(
+      '<html><head><title>Test Page</title></head><body><div>this is the root</div><img src="hi.jpg"></body></html>',
+    ),
+  },
+  'nochanges.html': {
+    contents: new Buffer('<title>Test Page</title><p>nothing <em>here'),
+  },
+  'invalid.html': {
+    contents: new Buffer('<<<fw8ag ==<<'),
+  },
+};
 
 const plugin = promisify(
   domTransform({
@@ -28,36 +51,15 @@ const plugin = promisify(
   }),
 );
 
-beforeEach(() => {
-  // Re-generate before every test so we don't have side effects
-  files = {
-    'ignore-non-html.jpg': {
-      contents: new Buffer('<div>Hi</div>'),
-    },
-    'fragment.html': {
-      contents: new Buffer('<div>Root</div>'),
-    },
-    'doctype.html': {
-      contents: new Buffer(
-        '<!DOCTYPE html><html><head><title>Test Page</title></head><body><div>this is the root</div><img src="hi.jpg"></body></html>',
-      ),
-    },
-    'nodoctype.html': {
-      contents: new Buffer(
-        '<html><head><title>Test Page</title></head><body><div>this is the root</div><img src="hi.jpg"></body></html>',
-      ),
-    },
-    'nochanges.html': {
-      contents: new Buffer('<title>Test Page</title><p>nothing <em>here'),
-    },
-  };
-
+beforeAll(() => {
   return plugin(files, {});
 });
 
-test('file suite', () => {
+describe('integration', () => {
   for (let file in files) {
-    expect(files[file].contents.toString()).toMatchSnapshot();
+    test(file, () => {
+      expect(files[file].contents.toString()).toMatchSnapshot();
+    });
   }
 });
 
@@ -78,8 +80,13 @@ test('crashy transform', () => {
   /* eslint-disable no-console */
   const originalConsoleError = console.error;
   console.error = jest.fn(() => {});
+  const singleFile = {
+    'file.html': {
+      contents: new Buffer('<p>Hello</p>'),
+    },
+  };
 
-  return crashy(files, {}).then(() => {
+  return crashy(singleFile, {}).then(() => {
     // Should have no changes.
     expect(files['doctype.html'].contents.toString()).toMatchSnapshot();
     expect(console.error.mock.calls[0][0]).toMatchSnapshot();
