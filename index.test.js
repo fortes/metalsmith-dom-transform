@@ -2,27 +2,7 @@
 const domTransform = require('./index');
 const {promisify} = require('util');
 
-const files = {
-  'ignore-non-html.jpg': {
-    contents: new Buffer('<div>Hi</div>'),
-  },
-  'fragment.html': {
-    contents: new Buffer('<div>Root</div>'),
-  },
-  'doctype.html': {
-    contents: new Buffer(
-      '<!DOCTYPE html><html><head><title>Test Page</title></head><body><div>this is the root</div><img src="hi.jpg"></body></html>',
-    ),
-  },
-  'nodoctype.html': {
-    contents: new Buffer(
-      '<html><head><title>Test Page</title></head><body><div>this is the root</div><img src="hi.jpg"></body></html>',
-    ),
-  },
-  'nochanges.html': {
-    contents: new Buffer('<title>Test Page</title><p>nothing <em>here'),
-  },
-};
+let files;
 
 const plugin = promisify(
   domTransform({
@@ -49,14 +29,37 @@ const plugin = promisify(
 );
 
 beforeEach(() => {
+  // Re-generate before every test so we don't have side effects
+  files = {
+    'ignore-non-html.jpg': {
+      contents: new Buffer('<div>Hi</div>'),
+    },
+    'fragment.html': {
+      contents: new Buffer('<div>Root</div>'),
+    },
+    'doctype.html': {
+      contents: new Buffer(
+        '<!DOCTYPE html><html><head><title>Test Page</title></head><body><div>this is the root</div><img src="hi.jpg"></body></html>',
+      ),
+    },
+    'nodoctype.html': {
+      contents: new Buffer(
+        '<html><head><title>Test Page</title></head><body><div>this is the root</div><img src="hi.jpg"></body></html>',
+      ),
+    },
+    'nochanges.html': {
+      contents: new Buffer('<title>Test Page</title><p>nothing <em>here'),
+    },
+  };
+
   return plugin(files, {});
 });
 
-for (let file in files) {
-  test(file, () => {
+test('file suite', () => {
+  for (let file in files) {
     expect(files[file].contents.toString()).toMatchSnapshot();
-  });
-}
+  }
+});
 
 test('crashy transform', () => {
   const crashy = promisify(

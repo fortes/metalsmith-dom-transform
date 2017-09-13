@@ -4,12 +4,12 @@ exports[`crashy transform 1`] = `"<!DOCTYPE html><html><head><title>Test Page</t
 
 exports[`crashy transform 2`] = `"Error during DOM transform of nochanges.html: Crash!"`;
 
-exports[`doctype.html 1`] = `"<!DOCTYPE html><html><head><title>Test Page</title></head><body><div class=\\"added\\">this is the root</div><img src=\\"hi.jpg\\" width=\\"100\\"></body></html>"`;
+exports[`file suite 1`] = `"<div>Hi</div>"`;
 
-exports[`fragment.html 1`] = `"<div class=\\"added\\">Root</div>"`;
+exports[`file suite 2`] = `"<div class=\\"added\\">Root</div>"`;
 
-exports[`ignore-non-html.jpg 1`] = `"<div>Hi</div>"`;
+exports[`file suite 3`] = `"<!DOCTYPE html><html><head><title>Test Page</title></head><body><div class=\\"added\\">this is the root</div><img src=\\"hi.jpg\\" width=\\"100\\"></body></html>"`;
 
-exports[`nochanges.html 1`] = `"<title>Test Page</title><p>nothing <em>here"`;
+exports[`file suite 4`] = `"<html><head><title>Test Page</title></head><body><div class=\\"added\\">this is the root</div><img src=\\"hi.jpg\\" width=\\"100\\"></body></html>"`;
 
-exports[`nodoctype.html 1`] = `"<html><head><title>Test Page</title></head><body><div class=\\"added\\">this is the root</div><img src=\\"hi.jpg\\" width=\\"100\\"></body></html>"`;
+exports[`file suite 5`] = `"<title>Test Page</title><p>nothing <em>here"`;
