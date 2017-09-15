@@ -1,4 +1,6 @@
+/* eslint-env node */
 const JSDOM = require('jsdom').JSDOM;
+const {promisify} = require('util');
 
 const HTML_FILENAME_REGEXP = /\.html$/;
 
@@ -7,11 +9,13 @@ function isFragment(html) {
   return !/<html/i.test(html);
 }
 
-function runTransforms(data, {transforms}, metalsmith) {
-  let root;
-  let dom;
+async function runTransforms(file, transforms, files, metalsmith) {
+  const data = files[file];
   const html = data.contents.toString();
   const useFragment = isFragment(html);
+
+  let root;
+  let dom;
 
   if (useFragment) {
     root = JSDOM.fragment(`<main data-wrapper>${html}</main>`);
@@ -26,43 +30,34 @@ function runTransforms(data, {transforms}, metalsmith) {
 
   const previousHtml = getHtml();
 
-  return Promise.all(
-    transforms.map(transform => {
-      return new Promise((resolve, reject) => {
-        transform(root, data, metalsmith, err => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(root);
-          }
-        });
-      });
-    }),
-  ).then(() => {
-    const newHtml = getHtml();
-
-    if (newHtml !== previousHtml) {
-      data.contents = new Buffer(getHtml());
+  for (const transform of transforms) {
+    try {
+      await transform(root, file, {files, metalsmith});
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(
+        `Error during one of the DOM transforms of ${file}: ${err.message}`,
+      );
     }
-  });
+  }
+
+  const newHtml = getHtml();
+
+  if (newHtml !== previousHtml) {
+    data.contents = new Buffer(getHtml());
+  }
 }
 
 module.exports = function(options) {
-  return function(files, metalsmith, done) {
-    const fileTransforms = [];
+  const transforms = options.transforms.map(promisify);
 
-    for (var file in files) {
-      if (HTML_FILENAME_REGEXP.test(file)) {
-        fileTransforms.push(runTransforms(files[file], options, metalsmith));
-      }
-    }
+  return function(files, metalsmith, done) {
+    const fileTransforms = Object.keys(files)
+      .filter(file => HTML_FILENAME_REGEXP.test(file))
+      .map(file => runTransforms(file, transforms, files, metalsmith));
 
     Promise.all(fileTransforms)
-      .catch(err => {
-        console.error(`Error during DOM transform of ${file}: ${err.message}`);
-      })
-      .then(() => {
-        done();
-      });
+      .then(() => {})
+      .then(done, done);
   };
 };

@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`crashy transform 1`] = `"<!DOCTYPE html><html><head><title>Test Page</title></head><body><div class=\\"added\\">this is the root</div><img src=\\"hi.jpg\\" width=\\"100\\"></body></html>"`;
+exports[`crashy transform 1`] = `"<p>Hello</p>"`;
 
-exports[`crashy transform 2`] = `"Error during DOM transform of file.html: Crash!"`;
+exports[`crashy transform 2`] = `"Error during one of the DOM transforms of file.html: Crash!"`;
 
 exports[`integration doctype.html 1`] = `"<!DOCTYPE html><html><head><title>Test Page</title></head><body><div class=\\"added\\">this is the root</div><img src=\\"hi.jpg\\" width=\\"100\\"></body></html>"`;
 

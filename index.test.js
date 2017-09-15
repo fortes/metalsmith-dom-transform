@@ -2,6 +2,8 @@
 const domTransform = require('./index');
 const {promisify} = require('util');
 
+jest.useFakeTimers();
+
 const files = {
   'ignore-non-html.jpg': {
     contents: new Buffer('<div>Hi</div>'),
@@ -30,7 +32,7 @@ const files = {
 const plugin = promisify(
   domTransform({
     transforms: [
-      (root, data, metalsmith, done) => {
+      (root, file, _info, done) => {
         const div = root.querySelector('div');
 
         if (div) {
@@ -39,20 +41,21 @@ const plugin = promisify(
 
         done();
       },
-      (root, data, metalsmith, done) => {
+      (root, file, _info, done) => {
         const image = root.querySelector('img');
         if (image) {
           image.setAttribute('width', 100);
         }
-        // Make it async
-        setTimeout(done, 50);
+        done();
       },
     ],
   }),
 );
 
 beforeAll(() => {
-  return plugin(files, {});
+  const promise = plugin(files, {version: 'hi'});
+  jest.runAllTimers();
+  return promise;
 });
 
 describe('integration', () => {
@@ -67,7 +70,7 @@ test('crashy transform', () => {
   const crashy = promisify(
     domTransform({
       transforms: [
-        (root, data, metalsmith, done) => {
+        (root, file, _info, done) => {
           // Changes shouldn't take effect
           root.innerHTML = 'CRASH';
           done(new Error('Crash!'));
@@ -86,10 +89,53 @@ test('crashy transform', () => {
     },
   };
 
-  return crashy(singleFile, {}).then(() => {
+  const promise = crashy(singleFile, {}).then(() => {
     // Should have no changes.
-    expect(files['doctype.html'].contents.toString()).toMatchSnapshot();
+    expect(singleFile['file.html'].contents.toString()).toMatchSnapshot();
     expect(console.error.mock.calls[0][0]).toMatchSnapshot();
     console.error = originalConsoleError;
   });
+
+  jest.runAllTimers();
+
+  return promise;
+});
+
+// TODO: Right now transforms could mess each other up when one yields and the
+// other messes up the tree. Write a test w/ a timeout that shows how this
+// happens, then fix.
+test('transformations execute serially', () => {
+  const async = promisify(
+    domTransform({
+      transforms: [
+        (root, file, _info, done) => {
+          setTimeout(() => {
+            root.firstChild.innerHTML = 'first';
+            done();
+          }, 10);
+        },
+        (root, file, _info, done) => {
+          if (root.firstChild.innerHTML === 'first') {
+            root.firstChild.innerHTML = 'second';
+          }
+
+          done();
+        },
+      ],
+    }),
+  );
+
+  const singleFile = {
+    'asyncfile.html': {
+      contents: new Buffer('<p>To Be Replaced</p>'),
+    },
+  };
+
+  const promise = async(singleFile, {}).then(() => {
+    expect(singleFile['asyncfile.html'].contents.toString()).toBe('second');
+  });
+
+  jest.runAllTimers();
+
+  return promise;
 });

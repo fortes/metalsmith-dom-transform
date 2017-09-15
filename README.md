@@ -7,27 +7,34 @@ Infrastructure plugin for transforming page DOM via [jsdom](https://github.com/t
 ## Example
 
 ```js
-var domTransform = require('metalsmith-dom-transform');
+const domTransform = require('metalsmith-dom-transform');
 
 metalsmith.use(
   domTransform({
     transforms: [
       // Set target=_blank on all links
-      function(dom, data, metalsmith, done) {
-        const links = dom.querySelectorAll('a[href]');
-        for (let i = 0; i < links.length; i++) {
-          links[i].target = '_blank';
-        }
+      function(dom, file, {files, metalsmith}, done) {
+        Array.from(dom.querySelectorAll('a[href]')).forEach(link => {
+          link.target = '_blank';
+        });
 
         done();
       },
 
       // Make all images 200px wide
-      function(dom, data, metalsmith, done) {
-        const img = dom.querySelectorAll('img');
-        for (let i = 0; i < pre.length; i++) {
+      function(dom, file, {files, metalsmith}, done) {
+        Array.from(dom.querySelectorAll('img')).forEach(img => {
           img.width = 200;
-        }
+        });
+
+        done();
+      },
+
+      // Remove all <iframe> elements
+      function(dom, file, {files, metalsmith}, done) {
+        Array.from(dom.querySelectorAll('iframe')).forEach(iframe => {
+          iframe.remove();
+        });
 
         done();
       }
@@ -42,13 +49,15 @@ There is currently only one option:
 
 * `transforms`: array of functions that serve as DOM transformations. Each function takes three arguments:
   * `dom`: The root of the DOM for that page
-  * `data`: Metalsmith object for the page, contains metadata, etc.
-  * `metalsmith`: Metalsmith instance, passed to all plugins
+  * `file`: File path for the page being transformed
+  * `info`: Object that holds the same arguments passed to all metalsmith plugins, namely:
+    * `files`: Dictionary of all files being processed by this metalsmith instance
+    * `metalsmith`: Metalsmith instance
   * `done`: Callback for transformation completion
 
 ## Requirements
 
-Uses Promises, so requires a relatively recent (4.x or higher) version of node.
+Uses `async`/`await`, so requires a relatively recent (8.x or higher) version of node.
 
 ## Plugins built on this one
 
@@ -56,6 +65,7 @@ Uses Promises, so requires a relatively recent (4.x or higher) version of node.
 
 ## Changelog
 
+* `2.0.0`: Change transform function parameters
 * `1.0.1`: Don't serialize HTML if nothing changed (may cause HTML output differences)
 * `1.0.0`: Add `metalsmith` parameter
 * `0.0.2`: Fix stupid bug where async did not work
