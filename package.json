@@ -4,6 +4,7 @@
   "description": "Metalsmith plugin for transforming page DOM",
   "main": "index.js",
   "scripts": {
+    "coverage": "jest --collectCoverage --coverageDirectory ./coverage",
     "test": "jest"
   },
   "repository": {
@@ -25,9 +26,5 @@
   "devDependencies": {
     "codecov": "^2.3.0",
     "jest": "^21.0.2"
-  },
-  "jest": {
-    "coverageDirectory": "./coverage/",
-    "collectCoverage": true
   }
 }
