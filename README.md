@@ -62,6 +62,9 @@ Uses `async`/`await`, so requires a relatively recent (8.x or higher) version of
 ## Plugins built on this one
 
 * [`metalsmith-code-highlight`](https://github.com/fortes/metalsmith-code-highlight)
+* [`metalsmith-image-dimensions`](https://github.com/fortes/metalsmith-image-dimensions)
+
+If you create a plugin on top of this one, add a pull request and add yours to this list.
 
 ## Changelog
 
