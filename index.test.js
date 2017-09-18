@@ -101,9 +101,6 @@ test('crashy transform', () => {
   return promise;
 });
 
-// TODO: Right now transforms could mess each other up when one yields and the
-// other messes up the tree. Write a test w/ a timeout that shows how this
-// happens, then fix.
 test('transformations execute serially', () => {
   const async = promisify(
     domTransform({
@@ -112,7 +109,7 @@ test('transformations execute serially', () => {
           setTimeout(() => {
             root.firstChild.innerHTML = 'first';
             done();
-          }, 10);
+          }, 200);
         },
         (root, file, _info, done) => {
           if (root.firstChild.innerHTML === 'first') {

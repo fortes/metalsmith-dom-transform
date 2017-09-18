@@ -11,6 +11,9 @@
     "type": "git",
     "url": "https://github.com/fortes/metalsmith-dom-transform.git"
   },
+  "bugs": {
+    "url": "https://github.com/fortes/metalsmith-dom-transform/issues"
+  },
   "keywords": [
     "metalsmith",
     "plugin",
