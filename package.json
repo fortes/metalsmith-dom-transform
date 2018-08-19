@@ -24,7 +24,7 @@
   "author": "Filipe Fortes <accounts@fortes.com>",
   "license": "MIT",
   "dependencies": {
-    "jsdom": "^11.2.0"
+    "jsdom": "^12.0.0"
   },
   "devDependencies": {
     "codecov": "^3.0.0",
