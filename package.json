@@ -29,5 +29,8 @@
   "devDependencies": {
     "codecov": "^3.0.0",
     "jest": "^22.0.0"
+  },
+  "jest": {
+    "testURL": "http://localhost/"
   }
 }
