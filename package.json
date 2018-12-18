@@ -1,6 +1,6 @@
 {
   "name": "metalsmith-dom-transform",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Metalsmith plugin for transforming page DOM",
   "main": "index.js",
   "scripts": {
@@ -24,7 +24,7 @@
   "author": "Filipe Fortes <accounts@fortes.com>",
   "license": "MIT",
   "dependencies": {
-    "jsdom": "^11.2.0"
+    "jsdom": "^13.1.0"
   },
   "devDependencies": {
     "codecov": "^3.0.0",

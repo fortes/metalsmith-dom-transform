@@ -68,6 +68,7 @@ If you create a plugin on top of this one, add a pull request and add yours to t
 
 ## Changelog
 
+* `2.0.1`: Upgrade dependencies
 * `2.0.0`: Change transform function parameters
 * `1.0.1`: Don't serialize HTML if nothing changed (may cause HTML output differences)
 * `1.0.0`: Add `metalsmith` parameter
