@@ -1,3 +1,7 @@
+# No longer maintained
+
+This is no longer maintained, code is archived and available for forking though.
+
 # metalsmith-dom-transform
 
 [![build status](https://travis-ci.org/fortes/metalsmith-dom-transform.svg?branch=master)](https://travis-ci.org/fortes/metalsmith-dom-transform/) [![codecov](https://codecov.io/gh/fortes/metalsmith-dom-transform/branch/master/graph/badge.svg)](https://codecov.io/gh/fortes/metalsmith-dom-transform) [![Greenkeeper badge](https://badges.greenkeeper.io/fortes/metalsmith-dom-transform.svg)](https://greenkeeper.io/)
